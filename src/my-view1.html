@@ -11,7 +11,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="imort" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -27,20 +30,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <app-localstorage-document
 id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-document>
 
+<iron-ajax
+  auto
+  url="{{url}}"
+  params="{{options}}"
+  handle-as="json"
+  on-response="handleResponse"></iron-ajax>
+
+
     <div class="card">
       <div class="circle">1</div>
       <h1>Set-Up</h1>
+      
 
       <div>
         <paper-input label="Ticker symbol" value="{{portfolio.ticker}}"></paper-input>
         <paper-input label="Stock" value="{{portfolio.stock}}"></paper-input>
-        <paper-button on-tap="_addPor$tfolio">Add</paper-button>
-
+        <paper-button on-tap="_addToPortfolio">Add</paper-button>
       </div>
 
-
       <template is="dom-repeat" items="{{portfolios}}">
-        <p>[[item.ticker]] - [[item.stock]]<p>
+        <p>[[item.ticker]] [[item.stock]] [[item.value]]<paper-icon-button on-tap="_removeFromPortfolio" icon="delete"></paper-icon-button></p>
       </template>
 
   </div>
@@ -63,15 +73,78 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
             type: Array,
             value: function() {
               return [];
-            }
+            },
+            notify: true
+          },
+          currency: {
+            type: String,
+            notify: true,
+            value: "EUR"
+          },
+          nom: {
+            type: Number,
+            notify: true,
+            value: 0
+          },
+          url: {
+            type: String,
+            value: "https://min-api.cryptocompare.com/data/pricemulti"
+          },
+          options: {
+            type: String,
+            notify: true
           }
+
         };
       }
+      static get observers() {
+        return [
+          // Observer method name, followed by a list of dependencies, in parenthesis
+          '_computeOptions(nom, currency)'
+        ]
+      }
 
-      _addPortfolio() {
+      _computeOptions(nom, crcy) {
+        console.log("changed:" + nom + crcy);
+        var tickerArray = [];
+        for (var i = 0; i < this.portfolios.length; i++) {
+          console.log(this.portfolios[i].ticker);
+          tickerArray.push(this.portfolios[i].ticker);
+        }
+
+        this.options = {
+          fsyms: tickerArray.join(","),
+          tsyms: crcy
+        };
+        console.log(this.options);
+      }
+
+      _addToPortfolio() {
         console.log(this.portfolio);
         this.push('portfolios', this.portfolio);
         this.portfolio = {};
+        this.set('nom', this.portfolios.length);
+      }
+      handleResponse(response) {
+        var prices = response.detail.response;
+        var neport = [];
+        console.log(prices);
+        for (var i = 0; i < this.portfolios.length; i++) {
+          console.log(this.portfolios[i].ticker);
+          if (prices && prices[this.portfolios[i].ticker]) {
+            var p = prices[this.portfolios[i].ticker][this.currency];
+            console.log(p);
+            var value = p * this.portfolios[i].stock;
+            this.set('portfolios.' + i + '.value', value);
+          }
+        }
+        console.log(this.portfolios);
+      }
+      _removeFromPortfolio(e) {
+        console.log("remove portfolio element: " + e.model.item.ticker);
+        var index = this.portfolios.indexOf(e.model.item);
+        this.splice('portfolios', index, 1);
+        this.set('nom', this.portfolios.length);
       }
     }
 
