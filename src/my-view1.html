@@ -41,18 +41,32 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
     <div class="card">
       <div class="circle">1</div>
       <h1>Set-Up</h1>
-      
+	  <p>[[totalsum]]</p>
+      <paper-button on-tap="_reloadPrices" raised>reload</paper-button>
 
       <div>
         <paper-input label="Ticker symbol" value="{{portfolio.ticker}}"></paper-input>
         <paper-input label="Stock" value="{{portfolio.stock}}"></paper-input>
-        <paper-button on-tap="_addToPortfolio">Add</paper-button>
+        <paper-button on-tap="_addToPortfolio" raised>Add</paper-button>
       </div>
-
+<table>
+<tr>
+  <th>Ticker</th>
+  <th>Stock</th>
+  <th>Price</th>
+  <th>Holdings</th>
+</tr>
       <template is="dom-repeat" items="{{portfolios}}">
-        <p>[[item.ticker]] [[item.stock]] [[item.value]]<paper-icon-button on-tap="_removeFromPortfolio" icon="delete"></paper-icon-button></p>
-      </template>
+        <tr>
+<td>[[item.ticker]]</td>
+<td>[[item.stock]]</td>
+<td>[[item.price]]</td>
+<td>[[item.value]]</td>
+<td><paper-icon-button on-tap="_removeFromPortfolio" icon="delete" raised></paper-icon-button></td>
+        </tr>
 
+      </template>
+  </table>
   </div>
   </template>
 
@@ -81,11 +95,6 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
             notify: true,
             value: "EUR"
           },
-          nom: {
-            type: Number,
-            notify: true,
-            value: 0
-          },
           url: {
             type: String,
             value: "https://min-api.cryptocompare.com/data/pricemulti"
@@ -93,19 +102,29 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
           options: {
             type: String,
             notify: true
-          }
+          },
+		  totalsum: {
+			type: Number,
+			value: 0,
+			notify: true
+		  }
 
         };
       }
       static get observers() {
         return [
           // Observer method name, followed by a list of dependencies, in parenthesis
-          '_computeOptions(nom, currency)'
+          '_computeOptions(portfolios, currency)'
         ]
       }
 
-      _computeOptions(nom, crcy) {
-        console.log("changed:" + nom + crcy);
+      _reloadPrices() {
+        console.log("reload prices");
+        this._computeOptions(this.portfolios, this.currency);
+      }
+
+      _computeOptions(portfolios, crcy) {
+        console.log("changed:" + portfolios + crcy);
         var tickerArray = [];
         for (var i = 0; i < this.portfolios.length; i++) {
           console.log(this.portfolios[i].ticker);
@@ -119,11 +138,21 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
         console.log(this.options);
       }
 
+	  computeTotal(portfolios) {
+	  console.log('calc total');
+		var total = 0;
+		for (var i = 0; i < this.portfolios.length; i++) {
+		total =total+this.portfolios[i].value;
+		}
+		this.totalsum=total;
+		this.set('totalsum',total);
+		console.log(this.totalsum);
+	  }
+	  
       _addToPortfolio() {
         console.log(this.portfolio);
         this.push('portfolios', this.portfolio);
         this.portfolio = {};
-        this.set('nom', this.portfolios.length);
       }
       handleResponse(response) {
         var prices = response.detail.response;
@@ -135,16 +164,18 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
             var p = prices[this.portfolios[i].ticker][this.currency];
             console.log(p);
             var value = p * this.portfolios[i].stock;
+			this.portfolios[i].value=value;
+            this.set('portfolios.' + i + '.price', p);
             this.set('portfolios.' + i + '.value', value);
           }
         }
         console.log(this.portfolios);
+		this.computeTotal(this.portfolios);
       }
       _removeFromPortfolio(e) {
         console.log("remove portfolio element: " + e.model.item.ticker);
         var index = this.portfolios.indexOf(e.model.item);
         this.splice('portfolios', index, 1);
-        this.set('nom', this.portfolios.length);
       }
     }
 
