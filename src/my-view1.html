@@ -21,27 +21,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="my-view1">
   <template>
     <style include="shared-styles">
-      :host {
+       :host {
         display: block;
 
         padding: 10px;
       }
     </style>
-<app-localstorage-document
-id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-document>
+    <app-localstorage-document id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-document>
 
-<iron-ajax
-  auto
-  url="{{url}}"
-  params="{{options}}"
-  handle-as="json"
-  on-response="handleResponse"></iron-ajax>
+    <iron-ajax auto url="{{url}}" params="{{options}}" handle-as="json" on-response="handleResponse"></iron-ajax>
 
 
     <div class="card">
       <div class="circle">1</div>
       <h1>Set-Up</h1>
-	  <p>[[totalsum]]</p>
+      <p>[[totalsum]]</p>
       <paper-button on-tap="_reloadPrices" raised>reload</paper-button>
 
       <div>
@@ -49,25 +43,27 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
         <paper-input label="Stock" value="{{portfolio.stock}}"></paper-input>
         <paper-button on-tap="_addToPortfolio" raised>Add</paper-button>
       </div>
-<table>
-<tr>
-  <th>Ticker</th>
-  <th>Stock</th>
-  <th>Price</th>
-  <th>Holdings</th>
-</tr>
-      <template is="dom-repeat" items="{{portfolios}}">
+      <table>
         <tr>
-<td>[[item.ticker]]</td>
-<td>[[item.stock]]</td>
-<td>[[item.price]]</td>
-<td>[[item.value]]</td>
-<td><paper-icon-button on-tap="_removeFromPortfolio" icon="delete" raised></paper-icon-button></td>
+          <th>Ticker</th>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>Holdings</th>
         </tr>
+        <template is="dom-repeat" items="{{portfolios}}">
+          <tr>
+            <td>[[item.ticker]]</td>
+            <td>[[item.stock]]</td>
+            <td>[[item.price]]</td>
+            <td>[[item.value]]</td>
+            <td>
+              <paper-icon-button on-tap="_removeFromPortfolio" icon="delete" raised></paper-icon-button>
+            </td>
+          </tr>
 
-      </template>
-  </table>
-  </div>
+        </template>
+      </table>
+    </div>
   </template>
 
   <script>
@@ -79,13 +75,13 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
         return {
           portfolio: {
             type: Object,
-            value: function() {
+            value: function () {
               return {};
             }
           },
           portfolios: {
             type: Array,
-            value: function() {
+            value: function () {
               return [];
             },
             notify: true
@@ -103,11 +99,11 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
             type: String,
             notify: true
           },
-		  totalsum: {
-			type: Number,
-			value: 0,
-			notify: true
-		  }
+          totalsum: {
+            type: Number,
+            value: 0,
+            notify: true
+          }
 
         };
       }
@@ -138,17 +134,17 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
         console.log(this.options);
       }
 
-	  computeTotal(portfolios) {
-	  console.log('calc total');
-		var total = 0;
-		for (var i = 0; i < this.portfolios.length; i++) {
-		total =total+this.portfolios[i].value;
-		}
-		this.totalsum=total;
-		this.set('totalsum',total);
-		console.log(this.totalsum);
-	  }
-	  
+      computeTotal(portfolios) {
+        console.log('calc total');
+        var total = 0;
+        for (var i = 0; i < this.portfolios.length; i++) {
+          total = total + this.portfolios[i].value;
+        }
+        this.totalsum = total;
+        this.set('totalsum', total);
+        console.log(this.totalsum);
+      }
+
       _addToPortfolio() {
         console.log(this.portfolio);
         this.push('portfolios', this.portfolio);
@@ -164,13 +160,13 @@ id="portfolios" key="portfolios" data="{{portfolios}}"></app-localstorage-docume
             var p = prices[this.portfolios[i].ticker][this.currency];
             console.log(p);
             var value = p * this.portfolios[i].stock;
-			this.portfolios[i].value=value;
+            this.portfolios[i].value = value;
             this.set('portfolios.' + i + '.price', p);
             this.set('portfolios.' + i + '.value', value);
           }
         }
         console.log(this.portfolios);
-		this.computeTotal(this.portfolios);
+        this.computeTotal(this.portfolios);
       }
       _removeFromPortfolio(e) {
         console.log("remove portfolio element: " + e.model.item.ticker);
