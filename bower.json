@@ -1,9 +1,9 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "crypto-tools",
   "authors": [
-    "The Polymer Authors"
+    "Niki"
   ],
-  "license": "https://polymer.github.io/LICENSE.txt",
+  "license": "https://github.com/walnikster/cryptotools/blob/master/LICENSE",
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#^2.0.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
