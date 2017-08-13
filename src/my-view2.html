@@ -23,6 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: block;
 
       padding: 10px;
+      --placeholder-background-color: #4285f4;
+      
     }
     </style>
 
@@ -37,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="circle">BTC</div>
       <h1>Scan or enter bitcoin adress QR Code</h1>
       <paper-input label="Bitcoin Adress" value="{{btcadress}}"></paper-input>
-      <granite-qrcode-scanner data="{{btcadress}}" active="{{scanneractive}}" continuous width="150" height="150"></granite-qrcode-scanner>
+      <granite-qrcode-scanner data="{{btcadress}}" active="{{scanneractive}}" continuous width="200" height="200"></granite-qrcode-scanner>
       <p> <numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js></p>
       <paper-button on-tap="_sendRequest" raised>Get Bitcoin balance</paper-button>
     </div>
