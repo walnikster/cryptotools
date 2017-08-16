@@ -21,10 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
     :host {
       display: block;
-
       padding: 10px;
       --placeholder-background-color: #4285f4;
-      
     }
     </style>
 
@@ -37,10 +35,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <div class="circle">BTC</div>
-      <h1>Scan or enter bitcoin adress QR Code</h1>
+      <h1>Scan QR Code or enter bitcoin adress</h1>
       <paper-input label="Bitcoin Adress" value="{{btcadress}}"></paper-input>
-      <granite-qrcode-scanner data="{{btcadress}}" active="{{scanneractive}}" continuous width="200" height="200"></granite-qrcode-scanner>
-      <p> <numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js></p>
+      <granite-qrcode-scanner data="{{btcadress}}" active="false" placeholderMessage="{{phm}}" active="{{scanneractive}}" continuous width="200" height="200"></granite-qrcode-scanner>
+      <p><numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js></p>
       <paper-button on-tap="_sendRequest" raised>Get Bitcoin balance</paper-button>
     </div>
   </template>
@@ -60,6 +58,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           balance: {
             type: Number
+          },
+          phm: {
+            type: String,
+            value: "Click to scan QR-code"
+          },
+          scanneractive: {
+            type: Boolean,
+            value: false
           }
         }
       }
@@ -84,7 +90,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.set('balance', this.balance);
         console.log(this.balance);
       }
-
     }
 
     window.customElements.define(MyView2.is, MyView2);

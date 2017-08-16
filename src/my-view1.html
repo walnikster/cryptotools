@@ -32,7 +32,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <iron-ajax auto url="{{url}}" params="{{options}}" handle-as="json" on-response="handleResponse"></iron-ajax>
 
-
     <div class="card">
       <div class="circle">CP</div>
       <h1>Crypto Portfolio</h1>
@@ -55,24 +54,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </tr>
         <tr>
           <th class="right">
-            <numeral-js number="[[totalsum]]" format="0,0.00" print></numeral-js>
+            <numeral-js number="[[totalsum]]" format="0,000.00" print></numeral-js>
           </th>
         </tr>
         <template is="dom-repeat" items="{{portfolios}}">
           <tr>
             <td>[[item.ticker]]</td>
             <td class="right">
-              <numeral-js number="[[item.stock]]" format="0,0.00000" print></numeral-js>
+              <numeral-js number="[[item.stock]]" format="0,000.00000" print></numeral-js>
             </td>
             <td class="right">
-              <numeral-js number="[[item.price]]" format="0,0.00000" print></numeral-js>
+              <numeral-js number="[[item.price]]" format="0,000.00000" print></numeral-js>
             </td>
             <td class="right">
-              <numeral-js number="[[item.value]]" format="0,0.00" print></numeral-js>
+              <numeral-js number="[[item.value]]" format="0,000.00" print></numeral-js>
             </td>
             <td>
-              <paper-button on-tap="_removeFromPortfolio" raised>
-                <iron-icon icon="delete" />
+              <paper-button on-tap="_removeFromPortfolio" raised style="width:20px; height:20px;">
+                <iron-icon icon="delete" style="width:16px; height:16px;" />
               </paper-button>
             </td>
           </tr>
