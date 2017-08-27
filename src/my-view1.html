@@ -24,7 +24,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="shared-styles">
        :host {
         display: block;
-
         padding: 10px;
       }
     </style>
@@ -127,7 +126,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       static get observers() {
         return [
-          // Observer method name, followed by a list of dependencies, in parenthesis
           '_computeOptions(portfoliolength, currency)'
         ]
       }
@@ -179,9 +177,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var p = prices[this.portfolios[i].ticker][this.currency];
             console.log(p);
             var value = p * this.portfolios[i].stock;
-            this.portfolios[i].value = value;
             this.set('portfolios.' + i + '.price', p);
             this.set('portfolios.' + i + '.value', value);
+          } else {
+            console.log('no');
           }
         }
         console.log(this.portfolios);
