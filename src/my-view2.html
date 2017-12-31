@@ -78,8 +78,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           adaddress: {
             type: String,
-            // value: "http://localhost:8080/server/api/btcadresses
-            value: "http://localhost:8080/cryptotools/"
+            value: "http://localhost:18080/server/api/btcadresses"
+            // value: "http://localhost:8080/cryptotools/"
 
           },
           adressjsonString: {
@@ -96,17 +96,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _sendRequest() {
-          this.set('scanneractive', false);
-          this.scanneractive = false;
-          console.log(this.btcadress);
-          this.set('url', ("https://blockchain.info/de/q/addressbalance/" + this.btcadress));
-          console.log("url: " + "https://blockchain.info/de/q/addressbalance/" +  this.btcadress);
-          var adressjson  = new Object();
-          adressjson.adress =  this.btcadress;
-          this.set('adressjsonString', JSON.stringify(adressjson));
-          console.log("adressjson: " + adressjson);
-          this.$.addadress.generateRequest();
-          this.$.balanceajax.generateRequest();
+        this.set('scanneractive', false);
+        this.scanneractive = false;
+        console.log(this.btcadress);
+        this.set('url', ("https://blockchain.info/de/q/addressbalance/" + this.btcadress));
+        console.log("url: " + "https://blockchain.info/de/q/addressbalance/" + this.btcadress);
+        var adressjson = new Object();
+        adressjson.adress = this.btcadress;
+        this.set('adressjsonString', JSON.stringify(adressjson));
+        console.log("adressjson: " + adressjson);
+        this.$.addadress.generateRequest();
+        this.$.balanceajax.generateRequest();
       }
       handleResponse(response) {
         var balanceInSatoshi = response.detail.response;
