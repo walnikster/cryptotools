@@ -1,65 +1,73 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/numeral-js/numeral-js.html">
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html" />
+<link
+  rel="import"
+  href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html"
+/>
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../bower_components/numeral-js/numeral-js.html" />
+<link rel="import" href="shared-styles.html" />
 
 <dom-module id="my-view2">
   <template>
     <style include="shared-styles">
-    :host {
-      display: block;
-      padding: 10px;
-      --placeholder-background-color: #4285f4;
-    }
+      :host {
+        display: block;
+        padding: 10px;
+        --placeholder-background-color: #4285f4;
+      }
     </style>
 
-<iron-ajax
-  id="balanceajax"
-  url="[[url]]"
-  handle-as="text"
-  on-response="handleResponse"></iron-ajax>
+    <iron-ajax
+      id="balanceajax"
+      url="[[url]]"
+      handle-as="text"
+      on-response="(handleResponse)"
+    ></iron-ajax>
 
-  <iron-ajax
-  id="addadress"
-  method="POST"
-  url="[[adaddress]]"
-  handle-as="json"
-  content-type="application/json"
-  body="{{adressjsonString}}"
-  on-response="handleResponse"></iron-ajax>
+    <iron-ajax
+      id="addadress"
+      method="POST"
+      url="[[adaddress]]"
+      handle-as="json"
+      content-type="application/json"
+      body="{{ adressjsonString }}"
+      on-response="(handleResponse)"
+    ></iron-ajax>
 
     <div class="card">
       <div class="circle">BTC</div>
       <h1>Scan QR Code or enter bitcoin adress</h1>
-      <paper-input label="Bitcoin Adress" value="{{btcadress}}"></paper-input>
-      <granite-qrcode-scanner id ="qrscanner" data="{{btcadress}}" placeholder-message="{{phm}}" active="{{scanneractive}}" continuous width="200" height="200"></granite-qrcode-scanner>
-      <p><numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js></p>
-      <paper-button on-tap="_sendRequest" raised>Get Bitcoin balance</paper-button>
+      <paper-input label="Bitcoin Adress" value="{{ btcadress }}"></paper-input>
+      <granite-qrcode-scanner
+        id="qrscanner"
+        data="{{ btcadress }}"
+        placeholder-message="{{ phm }}"
+        active="{{ scanneractive }}"
+        continuous
+        width="200"
+        height="200"
+      ></granite-qrcode-scanner>
+      <p>
+        <numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js>
+      </p>
+      <paper-button on-tap="(_sendRequest)" raised
+        >Get Bitcoin balance</paper-button
+      >
     </div>
   </template>
 
   <script>
     class MyView2 extends Polymer.Element {
       static get is() {
-        return 'my-view2';
+        return 'my-view2'
       }
       connectedCallback() {
-        super.connectedCallback();
-        this.$.qrscanner.addEventListener('qrcode-decoded', e => this._sendRequest());
+        super.connectedCallback()
+        this.$.qrscanner.addEventListener('qrcode-decoded', e =>
+          this._sendRequest()
+        )
       }
       static get properties() {
         return {
@@ -74,18 +82,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           phm: {
             type: String,
-            value: "Click to scan QR-code"
+            value: 'Click to scan QR-code'
           },
           adaddress: {
             type: String,
-            value: "http://localhost:18080/server/api/btcadresses"
+            value: 'http://localhost:18080/server/api/btcadresses'
             // value: "http://localhost:8080/cryptotools/"
-
           },
           adressjsonString: {
             type: Object,
             value: function() {
-              return {};
+              return {}
             }
           },
           scanneractive: {
@@ -96,29 +103,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _sendRequest() {
-        this.set('scanneractive', false);
-        this.scanneractive = false;
-        console.log(this.btcadress);
-        this.set('url', ("https://blockchain.info/de/q/addressbalance/" + this.btcadress));
-        console.log("url: " + "https://blockchain.info/de/q/addressbalance/" + this.btcadress);
-        var adressjson = new Object();
-        adressjson.adress = this.btcadress;
-        this.set('adressjsonString', JSON.stringify(adressjson));
-        console.log("adressjson: " + adressjson);
-        this.$.addadress.generateRequest();
-        this.$.balanceajax.generateRequest();
+        this.set('scanneractive', false)
+        this.scanneractive = false
+        console.log(this.btcadress)
+        this.set(
+          'url',
+          'https://blockchain.info/de/q/addressbalance/' + this.btcadress
+        )
+        console.log(
+          'url: ' +
+            'https://blockchain.info/de/q/addressbalance/' +
+            this.btcadress
+        )
+        var adressjson = new Object()
+        adressjson.adress = this.btcadress
+        this.set('adressjsonString', JSON.stringify(adressjson))
+        console.log('adressjson: ' + adressjson)
+        this.$.addadress.generateRequest()
+        this.$.balanceajax.generateRequest()
       }
       handleResponse(response) {
-        var balanceInSatoshi = response.detail.response;
-        console.log(balanceInSatoshi);
-        this.balance = balanceInSatoshi / 100000000.0;
-        this.set('balance', this.balance);
-        console.log(this.balance);
+        var balanceInSatoshi = response.detail.response
+        console.log(balanceInSatoshi)
+        this.balance = balanceInSatoshi / 100000000.0
+        this.set('balance', this.balance)
+        console.log(this.balance)
       }
-
-
     }
 
-    window.customElements.define(MyView2.is, MyView2);
+    window.customElements.define(MyView2.is, MyView2)
   </script>
 </dom-module>
