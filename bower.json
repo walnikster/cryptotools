@@ -1,8 +1,6 @@
 {
   "name": "crypto-tools",
-  "authors": [
-    "Niki"
-  ],
+  "authors": ["Niki"],
   "license": "https://github.com/walnikster/cryptotools/blob/master/LICENSE",
   "dependencies": {
     "app-layout": "PolymerElements/app-layout#^2.0.0",

@@ -1,14 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html" />
-<link
-  rel="import"
-  href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html"
-/>
+<link rel="import" href="../bower_components/granite-qrcode-scanner/granite-qrcode-scanner.html" />
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" />
 <link rel="import" href="../bower_components/paper-input/paper-input.html" />
 <link rel="import" href="../bower_components/paper-button/paper-button.html" />
-<link rel="import" href="../bower_components/numeral-js/numeral-js.html" />
-<link rel="import" href="shared-styles.html" />
-
+<link rel="import" href="../bower_components/numeral-js/numeral-js.html" /> <link rel="import" href="shared-styles.html" />
 <dom-module id="my-view2">
   <template>
     <style include="shared-styles">
@@ -19,12 +14,7 @@
       }
     </style>
 
-    <iron-ajax
-      id="balanceajax"
-      url="[[url]]"
-      handle-as="text"
-      on-response="(handleResponse)"
-    ></iron-ajax>
+    <iron-ajax id="balanceajax" url="[[url]]" handle-as="text" on-response="(handleResponse)"></iron-ajax>
 
     <iron-ajax
       id="addadress"
@@ -49,12 +39,8 @@
         width="200"
         height="200"
       ></granite-qrcode-scanner>
-      <p>
-        <numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js>
-      </p>
-      <paper-button on-tap="(_sendRequest)" raised
-        >Get Bitcoin balance</paper-button
-      >
+      <p><numeral-js number="[[balance]]" format="0,0.000000" print></numeral-js></p>
+      <paper-button on-tap="(_sendRequest)" raised>Get Bitcoin balance</paper-button>
     </div>
   </template>
 
@@ -65,9 +51,7 @@
       }
       connectedCallback() {
         super.connectedCallback()
-        this.$.qrscanner.addEventListener('qrcode-decoded', e =>
-          this._sendRequest()
-        )
+        this.$.qrscanner.addEventListener('qrcode-decoded', e => this._sendRequest())
       }
       static get properties() {
         return {
@@ -106,15 +90,8 @@
         this.set('scanneractive', false)
         this.scanneractive = false
         console.log(this.btcadress)
-        this.set(
-          'url',
-          'https://blockchain.info/de/q/addressbalance/' + this.btcadress
-        )
-        console.log(
-          'url: ' +
-            'https://blockchain.info/de/q/addressbalance/' +
-            this.btcadress
-        )
+        this.set('url', 'https://blockchain.info/de/q/addressbalance/' + this.btcadress)
+        console.log('url: ' + 'https://blockchain.info/de/q/addressbalance/' + this.btcadress)
         var adressjson = new Object()
         adressjson.adress = this.btcadress
         this.set('adressjsonString', JSON.stringify(adressjson))
